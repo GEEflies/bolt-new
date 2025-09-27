@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { PenTool, FileText, CreditCard, TrendingUp, Play, Book, History, Settings, Plus, Lightbulb, Calendar, BarChart3, Sparkles, Clock, CreditCard as Edit3, Zap, Trophy, ArrowRight, ChevronRight } from 'lucide-react';
+import { PenTool, FileText, CreditCard, TrendingUp, Play, Book, History, Settings, Plus, Lightbulb, Calendar, BarChart3, Sparkles, Clock, CreditCard as Edit3, Zap, Trophy, ArrowRight, ChevronRight, Sun, Moon } from 'lucide-react';
 
 function App() {
   const [selectedTopic, setSelectedTopic] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const stats = [
     { 
@@ -86,10 +87,25 @@ function App() {
     { icon: Trophy, label: 'Achievements', color: 'text-yellow-400', bg: 'hover:bg-yellow-400/10' }
   ];
 
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-[#212121]' : 'bg-gray-50',
+    text: isDarkMode ? 'text-white' : 'text-gray-900',
+    cardBg: isDarkMode ? 'bg-[#171717]' : 'bg-white',
+    cardBorder: isDarkMode ? 'border-[#2f2f2f]' : 'border-gray-200',
+    secondaryBg: isDarkMode ? 'bg-[#212121]' : 'bg-gray-100',
+    secondaryText: isDarkMode ? 'text-[#8e8ea0]' : 'text-gray-600',
+    hoverBorder: isDarkMode ? 'hover:border-[#667eea]/40' : 'hover:border-[#667eea]/60',
+    headerBg: isDarkMode ? 'bg-[#171717]/80' : 'bg-white/80'
+  };
+
   return (
-    <div className="min-h-screen bg-[#212121] text-white">
+    <div className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} transition-colors duration-300`}>
       {/* Enhanced Header */}
-      <header className="border-b border-[#2f2f2f] bg-[#171717]/80 backdrop-blur-xl sticky top-0 z-20">
+      <header className={`border-b ${themeClasses.cardBorder} ${themeClasses.headerBg} backdrop-blur-xl sticky top-0 z-20 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -100,15 +116,22 @@ function App() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
                   SlohGPT
                 </h1>
-                <p className="text-[#8e8ea0] text-sm">AI Essay Assistant</p>
+                <p className={`${themeClasses.secondaryText} text-sm`}>AI Essay Assistant</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2 px-3 py-2 bg-[#212121] rounded-lg border border-[#2f2f2f]">
+              <div className={`flex items-center space-x-2 px-3 py-2 ${themeClasses.secondaryBg} rounded-lg border ${themeClasses.cardBorder}`}>
                 <Zap className="w-4 h-4 text-[#667eea]" />
                 <span className="text-sm font-medium">5 Credits</span>
               </div>
-              <button className="p-2 hover:bg-[#2f2f2f] rounded-lg transition-all duration-200 hover:scale-105">
+              <button 
+                onClick={toggleTheme}
+                className={`p-2 ${isDarkMode ? 'hover:bg-[#2f2f2f]' : 'hover:bg-gray-200'} rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center`}
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <button className={`p-2 ${isDarkMode ? 'hover:bg-[#2f2f2f]' : 'hover:bg-gray-200'} rounded-lg transition-all duration-200 hover:scale-105`}>
                 <Settings className="w-5 h-5" />
               </button>
             </div>
@@ -120,16 +143,16 @@ function App() {
         {/* Enhanced Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {stats.map((stat, index) => (
-            <div key={index} className={`bg-gradient-to-br ${stat.bgGradient} border border-[#2f2f2f] rounded-2xl p-6 hover:border-[#667eea]/40 transition-all duration-300 group hover:transform hover:scale-105 hover:shadow-xl hover:shadow-[#667eea]/10`}>
+            <div key={index} className={`${themeClasses.cardBg} bg-gradient-to-br ${stat.bgGradient} border ${themeClasses.cardBorder} rounded-2xl p-6 ${themeClasses.hoverBorder} transition-all duration-300 group hover:transform hover:scale-105 hover:shadow-xl hover:shadow-[#667eea]/10`}>
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl bg-[#212121] border border-[#2f2f2f]`}>
+                <div className={`p-3 rounded-xl ${themeClasses.secondaryBg} border ${themeClasses.cardBorder}`}>
                   <stat.icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
                 <TrendingUp className="w-4 h-4 text-green-400 group-hover:scale-110 transition-transform" />
               </div>
               <div className="space-y-2">
                 <p className="text-2xl font-bold">{stat.value}</p>
-                <p className="text-[#8e8ea0] text-sm font-medium">{stat.title}</p>
+                <p className={`${themeClasses.secondaryText} text-sm font-medium`}>{stat.title}</p>
                 <p className="text-green-400 text-xs font-medium">{stat.trend}</p>
               </div>
             </div>
@@ -139,7 +162,7 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Enhanced Main Action Card */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#171717] border border-[#2f2f2f] rounded-2xl p-8 relative overflow-hidden">
+            <div className={`${themeClasses.cardBg} border ${themeClasses.cardBorder} rounded-2xl p-8 relative overflow-hidden transition-colors duration-300`}>
               {/* Background Gradient Effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#667eea]/5 to-[#764ba2]/5 rounded-2xl"></div>
               
@@ -160,7 +183,7 @@ function App() {
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
                     <Lightbulb className="w-5 h-5 text-[#667eea]" />
-                    <p className="text-[#8e8ea0] font-medium">Quick topic suggestions:</p>
+                    <p className={`${themeClasses.secondaryText} font-medium`}>Quick topic suggestions:</p>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {quickTopics.map((topic, index) => (
@@ -170,7 +193,7 @@ function App() {
                         className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedTopic === topic
                             ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-lg'
-                            : 'bg-[#2f2f2f] text-[#8e8ea0] hover:bg-[#667eea]/20 hover:text-white hover:scale-105'
+                            : `${themeClasses.secondaryBg} ${themeClasses.secondaryText} hover:bg-[#667eea]/20 ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'} hover:scale-105`
                         }`}
                       >
                         {topic}
@@ -180,20 +203,20 @@ function App() {
                 </div>
 
                 {/* Enhanced Recent Essay Preview */}
-                <div className="bg-[#212121] border border-[#2f2f2f] rounded-xl p-6 hover:border-[#667eea]/30 transition-all duration-300 group">
+                <div className={`${themeClasses.secondaryBg} border ${themeClasses.cardBorder} rounded-xl p-6 hover:border-[#667eea]/30 transition-all duration-300 group`}>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
                       <Clock className="w-5 h-5 text-[#667eea]" />
                       <h3 className="font-semibold">Continue Your Last Essay</h3>
                     </div>
-                    <span className="text-xs text-[#8e8ea0] bg-[#2f2f2f] px-3 py-1 rounded-full">2 hours ago</span>
+                    <span className={`text-xs ${themeClasses.secondaryText} ${isDarkMode ? 'bg-[#2f2f2f]' : 'bg-gray-200'} px-3 py-1 rounded-full`}>2 hours ago</span>
                   </div>
-                  <h4 className="font-medium mb-3 text-white">The Future of Renewable Energy</h4>
-                  <p className="text-[#8e8ea0] text-sm leading-relaxed mb-4">
+                  <h4 className={`font-medium mb-3 ${themeClasses.text}`}>The Future of Renewable Energy</h4>
+                  <p className={`${themeClasses.secondaryText} text-sm leading-relaxed mb-4`}>
                     "The transition to renewable energy represents one of the most significant challenges and opportunities of our time. As nations grapple with climate change and environmental sustainability, the shift towards clean energy sources..."
                   </p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-sm text-[#8e8ea0]">
+                    <div className={`flex items-center space-x-4 text-sm ${themeClasses.secondaryText}`}>
                       <span>856 words</span>
                       <span>•</span>
                       <span>95% complete</span>
@@ -208,7 +231,7 @@ function App() {
             </div>
 
             {/* Enhanced Recent Activity */}
-            <div className="bg-[#171717] border border-[#2f2f2f] rounded-2xl p-6">
+            <div className={`${themeClasses.cardBg} border ${themeClasses.cardBorder} rounded-2xl p-6 transition-colors duration-300`}>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
                   <History className="w-6 h-6 text-[#667eea]" />
@@ -220,13 +243,13 @@ function App() {
               </div>
               <div className="space-y-3">
                 {recentEssays.map((essay, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-[#212121] border border-[#2f2f2f] rounded-xl hover:border-[#667eea]/40 transition-all duration-200 group cursor-pointer hover:transform hover:scale-[1.02]">
+                  <div key={index} className={`flex items-center justify-between p-4 ${themeClasses.secondaryBg} border ${themeClasses.cardBorder} rounded-xl ${themeClasses.hoverBorder} transition-all duration-200 group cursor-pointer hover:transform hover:scale-[1.02]`}>
                     <div className="flex-1">
                       <h4 className="font-medium group-hover:text-[#667eea] transition-colors mb-2">{essay.title}</h4>
                       <div className="flex items-center space-x-4 mb-2">
-                        <span className="text-[#8e8ea0] text-sm">{essay.words} words</span>
-                        <span className="text-[#8e8ea0] text-sm">•</span>
-                        <span className="text-[#8e8ea0] text-sm">{essay.date}</span>
+                        <span className={`${themeClasses.secondaryText} text-sm`}>{essay.words} words</span>
+                        <span className={`${themeClasses.secondaryText} text-sm`}>•</span>
+                        <span className={`${themeClasses.secondaryText} text-sm`}>{essay.date}</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <span className={`text-xs px-3 py-1 rounded-full font-medium ${
@@ -237,17 +260,17 @@ function App() {
                           {essay.status}
                         </span>
                         <div className="flex items-center space-x-2">
-                          <div className="w-16 h-1 bg-[#2f2f2f] rounded-full overflow-hidden">
+                          <div className={`w-16 h-1 ${isDarkMode ? 'bg-[#2f2f2f]' : 'bg-gray-300'} rounded-full overflow-hidden`}>
                             <div 
                               className="h-full bg-gradient-to-r from-[#667eea] to-[#764ba2] transition-all duration-300"
                               style={{ width: `${essay.progress}%` }}
                             ></div>
                           </div>
-                          <span className="text-xs text-[#8e8ea0]">{essay.progress}%</span>
+                          <span className={`text-xs ${themeClasses.secondaryText}`}>{essay.progress}%</span>
                         </div>
                       </div>
                     </div>
-                    <FileText className="w-5 h-5 text-[#8e8ea0] group-hover:text-[#667eea] transition-colors ml-4" />
+                    <FileText className={`w-5 h-5 ${themeClasses.secondaryText} group-hover:text-[#667eea] transition-colors ml-4`} />
                   </div>
                 ))}
               </div>
@@ -257,12 +280,12 @@ function App() {
           {/* Enhanced Sidebar */}
           <div className="space-y-6">
             {/* Enhanced Credits Section */}
-            <div className="bg-[#171717] border border-[#2f2f2f] rounded-2xl p-6 relative overflow-hidden">
+            <div className={`${themeClasses.cardBg} border ${themeClasses.cardBorder} rounded-2xl p-6 relative overflow-hidden transition-colors duration-300`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#667eea]/5 to-[#764ba2]/5 rounded-2xl"></div>
               
               <div className="relative z-10">
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-2 bg-[#212121] rounded-lg border border-[#2f2f2f]">
+                  <div className={`p-2 ${themeClasses.secondaryBg} rounded-lg border ${themeClasses.cardBorder}`}>
                     <CreditCard className="w-5 h-5 text-[#667eea]" />
                   </div>
                   <h3 className="text-lg font-semibold">Credits</h3>
@@ -270,11 +293,11 @@ function App() {
                 
                 <div className="text-center mb-6">
                   <div className="text-4xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent mb-2">5</div>
-                  <div className="text-[#8e8ea0] text-sm font-medium">Credits Available</div>
+                  <div className={`${themeClasses.secondaryText} text-sm font-medium`}>Credits Available</div>
                 </div>
                 
-                <div className="bg-[#212121] border border-[#2f2f2f] rounded-xl p-4 mb-6">
-                  <div className="text-sm text-[#8e8ea0] font-medium mb-3">Usage Breakdown:</div>
+                <div className={`${themeClasses.secondaryBg} border ${themeClasses.cardBorder} rounded-xl p-4 mb-6`}>
+                  <div className={`text-sm ${themeClasses.secondaryText} font-medium mb-3`}>Usage Breakdown:</div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
                       <span>Each essay</span>
@@ -298,35 +321,35 @@ function App() {
             </div>
 
             {/* Enhanced Quick Actions */}
-            <div className="bg-[#171717] border border-[#2f2f2f] rounded-2xl p-6">
+            <div className={`${themeClasses.cardBg} border ${themeClasses.cardBorder} rounded-2xl p-6 transition-colors duration-300`}>
               <h3 className="text-lg font-semibold mb-6 flex items-center space-x-3">
                 <Zap className="w-5 h-5 text-[#667eea]" />
                 <span>Quick Actions</span>
               </h3>
               <div className="space-y-3">
                 {quickActions.map((action, index) => (
-                  <button key={index} className={`w-full flex items-center justify-between p-4 bg-[#212121] border border-[#2f2f2f] rounded-xl hover:border-[#667eea]/50 ${action.bg} transition-all duration-200 group hover:scale-105`}>
+                  <button key={index} className={`w-full flex items-center justify-between p-4 ${themeClasses.secondaryBg} border ${themeClasses.cardBorder} rounded-xl hover:border-[#667eea]/50 ${action.bg} transition-all duration-200 group hover:scale-105`}>
                     <div className="flex items-center space-x-3">
                       <action.icon className={`w-5 h-5 ${action.color}`} />
-                      <span className="group-hover:text-white transition-colors font-medium">{action.label}</span>
+                      <span className={`${isDarkMode ? 'group-hover:text-white' : 'group-hover:text-gray-900'} transition-colors font-medium`}>{action.label}</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-[#8e8ea0] group-hover:text-white group-hover:translate-x-1 transition-all" />
+                    <ChevronRight className={`w-4 h-4 ${themeClasses.secondaryText} ${isDarkMode ? 'group-hover:text-white' : 'group-hover:text-gray-900'} group-hover:translate-x-1 transition-all`} />
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Enhanced News/Updates */}
-            <div className="bg-[#171717] border border-[#2f2f2f] rounded-2xl p-6">
+            <div className={`${themeClasses.cardBg} border ${themeClasses.cardBorder} rounded-2xl p-6 transition-colors duration-300`}>
               <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-[#212121] rounded-lg border border-[#2f2f2f]">
+                <div className={`p-2 ${themeClasses.secondaryBg} rounded-lg border ${themeClasses.cardBorder}`}>
                   <Lightbulb className="w-5 h-5 text-[#667eea]" />
                 </div>
                 <h3 className="text-lg font-semibold">Latest Updates</h3>
               </div>
               <div className="space-y-4">
                 {newsItems.map((item, index) => (
-                  <div key={index} className="border border-[#2f2f2f] rounded-xl p-4 hover:border-[#667eea]/30 transition-all duration-200 group cursor-pointer">
+                  <div key={index} className={`border ${themeClasses.cardBorder} rounded-xl p-4 hover:border-[#667eea]/30 transition-all duration-200 group cursor-pointer`}>
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-sm group-hover:text-[#667eea] transition-colors">{item.title}</h4>
                       <span className={`text-xs px-2 py-1 rounded-full ${
@@ -337,8 +360,8 @@ function App() {
                         {item.type}
                       </span>
                     </div>
-                    <p className="text-[#8e8ea0] text-xs leading-relaxed mb-3">{item.description}</p>
-                    <div className="flex items-center space-x-2 text-[#8e8ea0]">
+                    <p className={`${themeClasses.secondaryText} text-xs leading-relaxed mb-3`}>{item.description}</p>
+                    <div className={`flex items-center space-x-2 ${themeClasses.secondaryText}`}>
                       <Calendar className="w-3 h-3" />
                       <span className="text-xs">{item.time}</span>
                     </div>
